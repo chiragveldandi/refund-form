@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AnimatePresence, motion } from "framer-motion";
@@ -15,34 +15,11 @@ import { SuccessScreen } from "./success-screen";
 import { BrandLogo } from "./brand-logo";
 import { submitRefundRequest } from "@/lib/submit-refund";
 
-const RETRY_COOLDOWN_SECONDS = 5 * 60;
-
-function formatCountdown(seconds: number) {
-  const m = Math.floor(seconds / 60);
-  const s = seconds % 60;
-  return `${m}:${s.toString().padStart(2, "0")}`;
-}
-
 export function RefundForm() {
   const [stepIndex, setStepIndex] = useState(0);
   const [direction, setDirection] = useState(1);
   const [submitted, setSubmitted] = useState(false);
-  const [status, setStatus] = useState<"idle" | "submitting" | "error">("idle");
-  const [cooldown, setCooldown] = useState(0);
-  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
-
-  useEffect(() => {
-    if (cooldown <= 0) {
-      if (intervalRef.current) clearInterval(intervalRef.current);
-      return;
-    }
-    intervalRef.current = setInterval(() => {
-      setCooldown((c) => Math.max(c - 1, 0));
-    }, 1000);
-    return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current);
-    };
-  }, [cooldown]);
+  const [submitting, setSubmitting] = useState(false);
 
   const {
     control,
@@ -81,24 +58,17 @@ export function RefundForm() {
   };
 
   const onSubmit = async (values: RefundFormValues) => {
-    setStatus("submitting");
-    const result = await submitRefundRequest(values);
-    if (result.success) {
-      setTimeout(() => {
-        setSubmitted(true);
-        setStatus("idle");
-      }, 5000);
-    } else {
-      setStatus("error");
-      setCooldown(RETRY_COOLDOWN_SECONDS);
-    }
+    setSubmitting(true);
+    setTimeout(() => {
+      setSubmitted(true);
+      setSubmitting(false);
+      submitRefundRequest(values).catch((err) => {
+        console.error("Refund submission failed:", err);
+      });
+    }, 3000);
   };
 
   const currentStep = STEPS[stepIndex];
-  const canRetry = status === "error" && cooldown === 0;
-  const sendDisabled = status === "submitting" || (status === "error" && cooldown > 0);
-
-  console.log("Apps Script URL:", process.env.NEXT_PUBLIC_APPSCRIPT_URL);
 
   return (
     <div className="relative mx-auto w-full max-w-lg">
@@ -165,17 +135,6 @@ export function RefundForm() {
               </motion.div>
             </AnimatePresence>
 
-            {status === "error" && (
-              <div className="mt-6 rounded-xl border border-brand-coral/30 bg-brand-coral/5 px-4 py-3 text-sm text-brand-coral">
-                We couldn&apos;t submit your request. Please wait a few minutes and try again.
-                {cooldown > 0 && (
-                  <span className="ml-1 font-semibold">
-                    You can retry in {formatCountdown(cooldown)}.
-                  </span>
-                )}
-              </div>
-            )}
-
             <div className="mt-8 flex items-center justify-between">
               <button
                 type="button"
@@ -189,16 +148,10 @@ export function RefundForm() {
               {isLastStep ? (
                 <button
                   type="submit"
-                  disabled={sendDisabled}
+                  disabled={submitting}
                   className="rounded-xl bg-brand-coral px-6 py-3 text-sm font-semibold text-white shadow-md shadow-brand-coral/20 transition-colors hover:bg-brand-coral/90 disabled:cursor-not-allowed disabled:opacity-50"
                 >
-                  {status === "submitting"
-                    ? "Sending..."
-                    : status === "error" && cooldown > 0
-                      ? `Retry in ${formatCountdown(cooldown)}`
-                      : canRetry
-                        ? "Try again"
-                        : "Send"}
+                  {submitting ? "Sending..." : "Send"}
                 </button>
               ) : (
                 <button
