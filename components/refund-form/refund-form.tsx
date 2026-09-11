@@ -84,8 +84,10 @@ export function RefundForm() {
     setStatus("submitting");
     const result = await submitRefundRequest(values);
     if (result.success) {
-      setSubmitted(true);
-      setStatus("idle");
+      setTimeout(() => {
+        setSubmitted(true);
+        setStatus("idle");
+      }, 5000);
     } else {
       setStatus("error");
       setCooldown(RETRY_COOLDOWN_SECONDS);

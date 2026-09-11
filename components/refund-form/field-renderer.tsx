@@ -65,6 +65,7 @@ export function FieldRenderer({
                   id={field.name}
                   type={field.type}
                   placeholder={field.placeholder}
+                  max={field.type === "date" ? new Date().toISOString().split("T")[0] : undefined}
                   className={`${inputBase} ${borderClass}`}
                 />
               );

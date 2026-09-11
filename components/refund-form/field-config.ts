@@ -28,7 +28,24 @@ export const PAYMENT_TYPE_OPTIONS = [
   "Others",
 ];
 
-export const CURRENCY_OPTIONS = ["USD", "INR", "GBP", "EUR", "AUD", "CAD"];
+export const CURRENCY_OPTIONS = [
+  "AED", "AFN", "ALL", "AMD", "ANG", "AOA", "ARS", "AUD", "AWG", "AZN",
+  "BAM", "BBD", "BDT", "BGN", "BHD", "BIF", "BMD", "BND", "BOB", "BRL",
+  "BSD", "BTN", "BWP", "BYN", "BZD", "CAD", "CDF", "CHF", "CLP", "CNY",
+  "COP", "CRC", "CUP", "CVE", "CZK", "DJF", "DKK", "DOP", "DZD", "EGP",
+  "ERN", "ETB", "EUR", "FJD", "FKP", "GBP", "GEL", "GHS", "GIP", "GMD",
+  "GNF", "GTQ", "GYD", "HKD", "HNL", "HRK", "HTG", "HUF", "IDR", "ILS",
+  "INR", "IQD", "IRR", "ISK", "JMD", "JOD", "JPY", "KES", "KGS", "KHR",
+  "KMF", "KRW", "KWD", "KYD", "KZT", "LAK", "LBP", "LKR", "LRD", "LSL",
+  "LYD", "MAD", "MDL", "MGA", "MKD", "MMK", "MNT", "MOP", "MRU", "MUR",
+  "MVR", "MWK", "MXN", "MYR", "MZN", "NAD", "NGN", "NIO", "NOK", "NPR",
+  "NZD", "OMR", "PAB", "PEN", "PGK", "PHP", "PKR", "PLN", "PYG", "QAR",
+  "RON", "RSD", "RUB", "RWF", "SAR", "SBD", "SCR", "SDG", "SEK", "SGD",
+  "SHP", "SLE", "SOS", "SRD", "SSP", "STN", "SYP", "SZL", "THB", "TJS",
+  "TMT", "TND", "TOP", "TRY", "TTD", "TWD", "TZS", "UAH", "UGX", "USD",
+  "UYU", "UZS", "VES", "VND", "VUV", "WST", "XAF", "XCD", "XOF", "XPF",
+  "YER", "ZAR", "ZMW", "ZWL",
+];
 
 export const REFUND_REASON_OPTIONS = [
   "Visa Rejected",
@@ -130,7 +147,14 @@ export const refundFormSchema = z.object({
       "Enter a valid amount",
     ),
   currency: z.string().min(1, "Please select a currency"),
-  paymentDate: z.string().min(1, "Date of payment is required"),
+  paymentDate: z
+    .string()
+    .min(1, "Date of payment is required")
+    .refine((v) => {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      return new Date(v) <= today;
+    }, "Date of payment cannot be in the future"),
   reason: z.string().min(1, "Please select a reason"),
   details: z.string().min(1, "Please tell us what happened"),
 });

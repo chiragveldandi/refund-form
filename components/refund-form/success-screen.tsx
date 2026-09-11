@@ -33,6 +33,10 @@ export function SuccessScreen() {
         Thanks for letting us know. Our team will review your request and get back to you at the
         email address you provided within 3–5 business days.
       </p>
+      <p className="mt-4 max-w-sm rounded-xl bg-slate-50 px-4 py-3 text-xs font-medium leading-relaxed text-slate-600">
+        You will receive a confirmation email within 5 minutes. If no email is received, please
+        submit the form again.
+      </p>
     </motion.div>
   );
 }
