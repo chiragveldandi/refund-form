@@ -96,6 +96,8 @@ export function RefundForm() {
   const canRetry = status === "error" && cooldown === 0;
   const sendDisabled = status === "submitting" || (status === "error" && cooldown > 0);
 
+  console.log("Apps Script URL:", process.env.NEXT_PUBLIC_APPSCRIPT_URL);
+
   return (
     <div className="relative mx-auto w-full max-w-lg">
       {!submitted && (

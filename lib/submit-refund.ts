@@ -10,6 +10,8 @@ export async function submitRefundRequest(
   }
 
   try {
+
+  console.log("Apps Script URL:", process.env.NEXT_PUBLIC_APPSCRIPT_URL);
     const response = await fetch(APPSCRIPT_URL, {
       method: "POST",
       body: JSON.stringify({ formType: "refund", ...values }),
