@@ -9,10 +9,14 @@ export async function submitRefundRequest(
     return { success: false, error: "Missing NEXT_PUBLIC_APPSCRIPT_URL" };
   }
 
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 15000);
+
   try {
     const response = await fetch(APPSCRIPT_URL, {
       method: "POST",
       body: JSON.stringify({ formType: "refund", ...values }),
+      signal: controller.signal,
     });
 
     if (!response.ok) {
@@ -29,9 +33,14 @@ export async function submitRefundRequest(
 
     return { success: true };
   } catch (err) {
+    if (err instanceof DOMException && err.name === "AbortError") {
+      return { success: false, error: "Request timed out after 15s" };
+    }
     return {
       success: false,
       error: err instanceof Error ? err.message : "Network error",
     };
+  } finally {
+    clearTimeout(timeout);
   }
 }
