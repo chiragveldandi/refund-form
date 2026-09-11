@@ -3,22 +3,23 @@ import type { RefundFormValues } from "@/components/refund-form/field-config";
 const APPSCRIPT_URL = process.env.NEXT_PUBLIC_APPSCRIPT_URL ?? "";
 
 export async function submitRefundRequest(
-  values: RefundFormValues
+  values: RefundFormValues,
 ): Promise<{ success: true } | { success: false; error: string }> {
   if (!APPSCRIPT_URL) {
     return { success: false, error: "Missing NEXT_PUBLIC_APPSCRIPT_URL" };
   }
 
   try {
-
-  console.log("Apps Script URL:", process.env.NEXT_PUBLIC_APPSCRIPT_URL);
     const response = await fetch(APPSCRIPT_URL, {
       method: "POST",
       body: JSON.stringify({ formType: "refund", ...values }),
     });
 
     if (!response.ok) {
-      return { success: false, error: `Request failed with status ${response.status}` };
+      return {
+        success: false,
+        error: `Request failed with status ${response.status}`,
+      };
     }
 
     const data = await response.json();
@@ -28,6 +29,9 @@ export async function submitRefundRequest(
 
     return { success: true };
   } catch (err) {
-    return { success: false, error: err instanceof Error ? err.message : "Network error" };
+    return {
+      success: false,
+      error: err instanceof Error ? err.message : "Network error",
+    };
   }
 }

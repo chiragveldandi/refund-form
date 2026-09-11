@@ -1,7 +1,7 @@
 "use client";
 
 import { Controller, type Control, type FieldErrors } from "react-hook-form";
-import type { FieldConfig } from "./field-config";
+import { getLocalDateString, type FieldConfig } from "./field-config";
 import type { RefundFormValues } from "./field-config";
 
 const inputBase =
@@ -65,7 +65,7 @@ export function FieldRenderer({
                   id={field.name}
                   type={field.type}
                   placeholder={field.placeholder}
-                  max={field.type === "date" ? new Date().toISOString().split("T")[0] : undefined}
+                  max={field.type === "date" ? getLocalDateString() : undefined}
                   className={`${inputBase} ${borderClass}`}
                 />
               );

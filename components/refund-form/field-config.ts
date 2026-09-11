@@ -1,5 +1,12 @@
 import { z } from "zod";
 
+export function getLocalDateString(d: Date = new Date()): string {
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
 export type FieldType =
   | "text"
   | "email"
@@ -150,11 +157,7 @@ export const refundFormSchema = z.object({
   paymentDate: z
     .string()
     .min(1, "Date of payment is required")
-    .refine((v) => {
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-      return new Date(v) <= today;
-    }, "Date of payment cannot be in the future"),
+    .refine((v) => v <= getLocalDateString(), "Date of payment cannot be in the future"),
   reason: z.string().min(1, "Please select a reason"),
   details: z.string().min(1, "Please tell us what happened"),
 });
