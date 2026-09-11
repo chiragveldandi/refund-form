@@ -1,6 +1,6 @@
 import type { RefundFormValues } from "@/components/refund-form/field-config";
 
-const APPSCRIPT_URL = process.env.APPSCRIPT_URL ?? "";
+const APPSCRIPT_URL = process.env.APPSCRIPT_URL_KEY ?? "";
 
 export async function submitRefundRequest(
   values: RefundFormValues
