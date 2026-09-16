@@ -35,7 +35,9 @@ export const PAYMENT_TYPE_OPTIONS = [
   "Others",
 ];
 
-export const CURRENCY_OPTIONS = [
+const PINNED_CURRENCIES = ["INR", "GBP", "USD", "EUR", "AUD", "CAD"];
+
+const ALL_CURRENCIES = [
   "AED", "AFN", "ALL", "AMD", "ANG", "AOA", "ARS", "AUD", "AWG", "AZN",
   "BAM", "BBD", "BDT", "BGN", "BHD", "BIF", "BMD", "BND", "BOB", "BRL",
   "BSD", "BTN", "BWP", "BYN", "BZD", "CAD", "CDF", "CHF", "CLP", "CNY",
@@ -52,6 +54,11 @@ export const CURRENCY_OPTIONS = [
   "TMT", "TND", "TOP", "TRY", "TTD", "TWD", "TZS", "UAH", "UGX", "USD",
   "UYU", "UZS", "VES", "VND", "VUV", "WST", "XAF", "XCD", "XOF", "XPF",
   "YER", "ZAR", "ZMW", "ZWL",
+];
+
+export const CURRENCY_OPTIONS = [
+  ...PINNED_CURRENCIES,
+  ...ALL_CURRENCIES.filter((c) => !PINNED_CURRENCIES.includes(c)),
 ];
 
 export const REFUND_REASON_OPTIONS = [
