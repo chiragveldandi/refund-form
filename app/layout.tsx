@@ -15,6 +15,19 @@ export const metadata: Metadata = {
   icons: {
     icon: "https://uniacco.imgix.net/site-static/v2/uniacco/logo.svg",
   },
+
+  openGraph: {
+    title: "Refund Request | UniAcco",
+    description: "Submit a refund request for your UniAcco booking",
+    images: [
+      {
+        url: "https://uniacco.imgix.net/site-static/v2/uniacco/logo.svg",
+        width: 1200,
+        height: 630,
+        alt: "UniAcco Refund Request",
+      },
+    ],
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
