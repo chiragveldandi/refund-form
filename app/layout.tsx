@@ -11,6 +11,10 @@ const poppins = Poppins({
 export const metadata: Metadata = {
   title: "Refund Request | UniAcco",
   description: "Submit a refund request for your UniAcco booking",
+
+  icons: {
+    icon: "https://uniacco.imgix.net/site-static/v2/uniacco/logo.svg",
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
