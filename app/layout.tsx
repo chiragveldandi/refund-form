@@ -13,7 +13,10 @@ export const metadata: Metadata = {
   description: "Submit a refund request for your UniAcco booking",
 
   icons: {
-    icon: "https://uniacco.imgix.net/site-static/v2/uniacco/logo.svg",
+    icon: {
+      url: "https://uniacco.imgix.net/site-static/v2/uniacco/logo.svg",
+      type: "image/svg+xml",
+    },
   },
 
   openGraph: {
@@ -21,9 +24,7 @@ export const metadata: Metadata = {
     description: "Submit a refund request for your UniAcco booking",
     images: [
       {
-        url: "https://uniacco.imgix.net/site-static/v2/uniacco/logo.svg",
-        width: 1200,
-        height: 630,
+        url: "/ua_mb_logo.png",
         alt: "UniAcco Refund Request",
       },
     ],
